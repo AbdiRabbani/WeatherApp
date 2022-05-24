@@ -114,8 +114,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupView(weather: WeatherResponse?, forecast: ForecastResponse?) {
-        weather?.let {
-            binding.apply {
+        binding.apply {
+            weather?.let{
                 city.text = weather.name
                 tvDegree.text = formatterDegree(it.main?.temp)
 
@@ -123,21 +123,23 @@ class MainActivity : AppCompatActivity() {
                 val iconUrl = BuildConfig.IMAGE_URL + icon + iconSize4x
                 Glide.with(applicationContext).load(iconUrl).into(icWeather)
 
-                rv.apply {
-                    weatherAdapter.setData(forecast?.list)
-                    layoutManager = LinearLayoutManager(
-                        applicationContext,
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                    adapter = weatherAdapter
-                }
-                setupBackground(weather.weather?.get(0)?.id)
+
+                setupBackground(weather.weather?.get(0)?.id, icon)
+            }
+
+            rv.apply {
+                weatherAdapter.setData(forecast?.list)
+                layoutManager = LinearLayoutManager(
+                    applicationContext,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
+                adapter = weatherAdapter
             }
         }
     }
 
-    private fun setupBackground(idWeather : Int?) {
+    private fun setupBackground(idWeather : Int?, icon : String?) {
         idWeather?.let {
             when (idWeather) {
                 in resources.getIntArray(R.array.thunderstorm_id_list) -> setImageBackground(R.drawable.thunderstorm)
@@ -147,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                 in resources.getIntArray(R.array.snow_id_list) -> setImageBackground(R.drawable.snow)
                 in resources.getIntArray(R.array.sleet_id_list) -> setImageBackground(R.drawable.sleet)
                 in resources.getIntArray(R.array.clear_id_list) -> setImageBackground(R.drawable.clear)
-                in resources.getIntArray(R.array.clouds_id_list) -> setImageBackground(R.drawable.lightcloud)
+                in resources.getIntArray(R.array.light_clouds_id_list) -> setImageBackground(R.drawable.lightcloud)
                 in resources.getIntArray(R.array.heavy_clouds_id_list) -> setImageBackground(R.drawable.heavycloud)
                 in resources.getIntArray(R.array.fog_id_list) -> setImageBackground(R.drawable.fog)
                 in resources.getIntArray(R.array.sand_id_list) -> setImageBackground(R.drawable.sand)
@@ -155,6 +157,14 @@ class MainActivity : AppCompatActivity() {
                 in resources.getIntArray(R.array.volcanic_ash_id_list) -> setImageBackground(R.drawable.volcanic)
                 in resources.getIntArray(R.array.squalls_id_list) -> setImageBackground(R.drawable.squalls)
                 in resources.getIntArray(R.array.tornado_id_list) -> setImageBackground(R.drawable.tornado)
+
+                in resources.getIntArray(R.array.clear_id_list) -> {
+                    when(icon) {
+                        "01d" -> setImageBackground(R.drawable.clear)
+                        "01n" -> setImageBackground(R.drawable.clear)
+                    }
+                }
+
 
                 else -> {}
             }
