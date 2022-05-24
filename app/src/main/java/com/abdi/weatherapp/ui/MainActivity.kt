@@ -13,6 +13,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abdi.weatherapp.BuildConfig
+import com.abdi.weatherapp.R
 import com.abdi.weatherapp.data.response.ForecastResponse
 import com.abdi.weatherapp.data.response.WeatherResponse
 import com.abdi.weatherapp.databinding.ActivityMainBinding
@@ -131,8 +132,37 @@ class MainActivity : AppCompatActivity() {
                     )
                     adapter = weatherAdapter
                 }
+                setupBackground(weather.weather?.get(0)?.id)
             }
         }
+    }
+
+    private fun setupBackground(idWeather : Int?) {
+        idWeather?.let {
+            when (idWeather) {
+                in resources.getIntArray(R.array.thunderstorm_id_list) -> setImageBackground(R.drawable.thunderstorm)
+                in resources.getIntArray(R.array.drizzle_id_list) -> setImageBackground(R.drawable.drizzle)
+                in resources.getIntArray(R.array.rain_id_list) -> setImageBackground(R.drawable.rain)
+                in resources.getIntArray(R.array.freezing_rain_id_list) -> setImageBackground(R.drawable.freezing_rain)
+                in resources.getIntArray(R.array.snow_id_list) -> setImageBackground(R.drawable.snow)
+                in resources.getIntArray(R.array.sleet_id_list) -> setImageBackground(R.drawable.sleet)
+                in resources.getIntArray(R.array.clear_id_list) -> setImageBackground(R.drawable.clear)
+                in resources.getIntArray(R.array.clouds_id_list) -> setImageBackground(R.drawable.lightcloud)
+                in resources.getIntArray(R.array.heavy_clouds_id_list) -> setImageBackground(R.drawable.heavycloud)
+                in resources.getIntArray(R.array.fog_id_list) -> setImageBackground(R.drawable.fog)
+                in resources.getIntArray(R.array.sand_id_list) -> setImageBackground(R.drawable.sand)
+                in resources.getIntArray(R.array.dust_id_list) -> setImageBackground(R.drawable.dust)
+                in resources.getIntArray(R.array.volcanic_ash_id_list) -> setImageBackground(R.drawable.volcanic)
+                in resources.getIntArray(R.array.squalls_id_list) -> setImageBackground(R.drawable.squalls)
+                in resources.getIntArray(R.array.tornado_id_list) -> setImageBackground(R.drawable.tornado)
+
+                else -> {}
+            }
+        }
+    }
+
+    private fun setImageBackground(image : Int) {
+        Glide.with(this).load(image).into(binding.imgBgWeather)
     }
 
     private fun searchCity() {
